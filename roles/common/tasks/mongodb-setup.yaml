@@ -1,0 +1,36 @@
+- name: copy mongodb repo
+  ansible.builtin.copy:
+    src: mongodb.repo
+    dest: /etc/yum.repos.d/mongodb.repo
+
+- name: Install mongodb client
+  ansible.builtin.package:
+    name: mongodb-org
+    state: present
+
+- name: Get the entries count
+  ansible.builtin.command: mongo --host {{MONGODB_HOST}} --quiet --eval "db = db.getSiblingDB('catalogue'); db.product.count()"
+  register: entries_count 
+  when: component == "catalogue"
+
+
+- name: Get the categories count
+  ansible.builtin.command: mongo --host {{MONGODB_HOST}} --quiet --eval "db = db.getSiblingDB('users'); db.users.count()"
+  register: user_count 
+  when: component == "user"
+
+
+# - name: print the count
+#   ansible.builtin.debug:
+#     msg: "product count : {{product_count}}"
+
+- name: "load {{component}} data"
+  ansible.builtin.command: "mongo --host {{MONGODB_HOST}} </app/schema/{{component}}.js"
+  when: component == "catalogue " and product_count.stdout == " 0 " # keep double quotes Mainly give space In starting & ending. 
+  #ignore_errors: true
+
+- name: "load {{component}} data"
+  ansible.builtin.command: "mongo --host {{MONGODB_HOST}} </app/schema/{{component}}.js"
+  when: component == "user " and users_count.stdout == " 0 " # keep double quotes Mainly give space In starting & ending. 
+  #ignore_errors: true
+ 

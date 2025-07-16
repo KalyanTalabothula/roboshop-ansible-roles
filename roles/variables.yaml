@@ -1,0 +1,12 @@
+MONGODB_HOST: mongodb.kalyanu.xyz
+CATALOGUE_HOST: catalogue.kalyanu.xyz
+REDIS_HOST: redis.kalyanu.xyz
+CART_HOST: cart.kalyanu.xyz
+USER_HOST: user.kalyanu.xyz
+MYSQL_HOST: mysql.kalyanu.xyz
+SHIPPING_HOST: shipping.kalyanu.xyz
+RABBITMQ_HOST: rabbitmq.kalyanu.xyz
+PAYMENT_HOST: payment.kalyanu.xyz
+DISPATCH_HOST: dispatch.kalyanu.xyz
+
+WEB_HOST: web.kalyanu.xyz

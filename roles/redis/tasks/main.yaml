@@ -1,0 +1,35 @@
+
+- name: Creating redis database
+  hosts: redis
+  become: yes
+  tasks:
+- name: By default redis 6 is available, We would like to enable 7 version and install list.
+  ansible.builtin.shell: " dnf module disable redis -y && dnf module enable redis:7 -y "
+
+- name: Install redis
+  ansible.builtin.package:
+    name: redis
+    state: present
+
+- name: allow remote connections
+  ansible.builtin.replace:
+    path: /etc/redis/redis.conf
+    regexp: '127.0.0.1'
+    replace: '0.0.0.0'
+
+- name: Update protected-mode in redis.conf
+  lineinfile:
+      path: /etc/redis/redis.conf
+      regexp: '^protected-mode yes'
+      line: 'protected-mode no'
+      state: present
+
+- name: Enable redis
+  ansible.builtin.service:
+    name: redis
+    enabled: yes
+
+- name: Start redis
+  ansible.builtin.service:
+    name: redis
+    state: started
