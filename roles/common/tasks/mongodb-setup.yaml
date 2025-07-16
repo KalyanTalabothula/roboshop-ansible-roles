@@ -8,13 +8,13 @@
     name: mongodb-org
     state: present
 
-- name: Get the entries count
+- name: "get the catalogue entries count"
   ansible.builtin.command: mongo --host {{MONGODB_HOST}} --quiet --eval "db = db.getSiblingDB('catalogue'); db.product.count()"
   register: entries_count 
   when: component == "catalogue"
 
 
-- name: Get the categories count
+- name: "get the user entries count"
   ansible.builtin.command: mongo --host {{MONGODB_HOST}} --quiet --eval "db = db.getSiblingDB('users'); db.users.count()"
   register: user_count 
   when: component == "user"
